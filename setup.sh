@@ -1,0 +1,2 @@
+export NOTION_API_KEY=secret_rycdzrDOKc0QHsWrwQocrrBpjsgLQAu4DG0XewKsf8u
+export NOTION_DATABASE_ID=c7ea75ce14a243ecb734107ff94dbeff
