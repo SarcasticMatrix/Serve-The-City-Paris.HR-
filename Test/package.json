@@ -10,6 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/identity": "^2.1.0",
+    "@microsoft/microsoft-graph-client": "^3.0.2",
     "@notionhq/client": "^2.0.0"
+  },
+  "devDependencies": {
+    "@microsoft/microsoft-graph-types": "^2.22.0"
   }
 }
