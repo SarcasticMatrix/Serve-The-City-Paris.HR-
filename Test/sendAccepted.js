@@ -9,14 +9,15 @@ const {
     DeviceCodeCredential
 } = require("@azure/identity");
 
-const credential = new DeviceCodeCredential('d1beaacb-c6b5-42b9-8869-2810fb362440', 'e0bcb58f-e00a-45b0-bc15-5905df9f5654', 'l3l8Q~iXflF0IKA.VHKKrudTRVbyc48qf9G8gbKf');
+const credential = new DeviceCodeCredential('d1beaacb-c6b5-42b9-8869-2810fb362440', 'e0bcb58f-e00a-45b0-bc15-5905df9f5654', '733e91ea-8dab-4328-8fef-8ae080d1cdff');
 const authProvider = new TokenCredentialAuthenticationProvider(credential, {
     scopes: ["user.read", "mail.send"]
 });
 
 
 /* Locataire 'd1beaacb-c6b5-42b9-8869-2810fb362440'
-Client 'e0bcb58f-e00a-45b0-bc15-5905df9f5654' */
+Client 'e0bcb58f-e00a-45b0-bc15-5905df9f5654' 
+Secret 'l3l8Q~iXflF0IKA.VHKKrudTRVbyc48qf9G8gbKf'*/
 
 
 /* const azureClient = AzureClient.initWithMiddleware({
