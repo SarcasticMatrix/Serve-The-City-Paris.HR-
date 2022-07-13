@@ -5,27 +5,24 @@ Extract :
 -> moveDeclined : list of the pageIds (string) of the accepted applications
 --------------------------------------------------------------------
 */
+
+// Environnement Notion
 const { Client } = require('@notionhq/client');
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
-// Constants    
+// Constants et variables
 const registrationsDatabaseId = 'c7ea75ce-14a2-43ec-b734-107ff94dbeff';              
-const membersDatabaseId = '54379786-8ba6-484f-89d6-80f75196b04a';
-const rejectedDatabaseId = 'abd1e970-bf6e-4bff-9f9f-0248a9024fad';
+//const membersDatabaseId = '54379786-8ba6-484f-89d6-80f75196b04a';
+//const rejectedDatabaseId = 'abd1e970-bf6e-4bff-9f9f-0248a9024fad';
 
 const propAcceptId = "LPf%3D";
 const proplastNameId = "HI%3CN";
-
-const propertyId = 'jLMI';
-const pageId = '23bccb09-6780-49ab-b32b-d3600e511f6f';
-const databaseId = registrationsDatabaseId;
 
 let acceptedUsers = [];
 let declinedUsers = [];
 let remindUsers = [];
                     
-
 // -----------------------------------------------------------------
 // FONCTIONS GENERALES 
 // -----------------------------------------------------------------
@@ -81,7 +78,7 @@ async function function_list(databaseId){
         // On indique dans la console que la personne de nom de famille <First Name> n'a pas encore été traité (n'a ni <Accepted>, <Rejected>)
         let lastName = await readProperty(proplastNameId, listPages[i].id);
         lastName = lastName.results[0].rich_text.text.content;
-        console.log(lastName + " has not yet been processed");
+        console.log(lastName + " has not yet been processed as <Accepted> or <Refused>");
       }
     }
       
@@ -94,6 +91,7 @@ async function function_list(databaseId){
 // Zone de test
 // -----------------------------------------------
 
+/*
 function_list(databaseId)
   .then((data) => {
     console.log(data[0]);
@@ -103,6 +101,9 @@ function_list(databaseId)
   .catch((err) => {
     console.log(err);
   })
+*/
+
+
 
 /*
 // -----------------------------------------------------------------
