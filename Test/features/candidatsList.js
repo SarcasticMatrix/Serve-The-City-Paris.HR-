@@ -8,6 +8,7 @@ Extract :
 
 // Environnement Notion
 const { Client } = require('@notionhq/client');
+const { makeConsoleLogger } = require('@notionhq/client/build/src/logging');
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 
@@ -29,7 +30,6 @@ async function readDatabase(databaseId) {
   const database = await notion.databases.query({database_id: databaseId});
   const listPages = database.results;
   //const listProperties = database.results[0].properties; // await notion.pages.retrieve( { page_id: listPages.results[0].id });
-
   return listPages;
 }
 
@@ -42,7 +42,7 @@ async function readProperty(propertyId, pageId){
 }
 
 
-export default async function function_list(databaseId){
+async function function_list(databaseId){
   // return la liste des pageId des personnes acceptées et refusées
   const listPages = await readDatabase(databaseId);
 
@@ -81,6 +81,18 @@ export default async function function_list(databaseId){
   return [moveAccepted, moveDeclined];
 }
 
+module.exports= { function_list:function_list, readProperty };
+
+
+const pageIdThibaud = "23bccb09-6780-49ab-b32b-d3600e511f6f";
+readProperty('ADTR', pageIdThibaud)
+  .then((data) => {
+    console.log(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+
 
 // -----------------------------------------------
 // Zone de test
@@ -104,26 +116,6 @@ function_list(databaseId)
 // -----------------------------------------------------------------
 // FONCTIONS USELESS  
 // -----------------------------------------------------------------
-
-async function readPage(pageId) {
-  // Return la page en json
-
-  
-  const responsePage = await notion.pages.retrieve({ page_id: pageId });
-  return responsePage;
-}
-
-
-function function_readPage(pageId){
-// Implémente la fonction asynchrone readPage en gerant les promises
-
-readPage(pageId)
-    .then((data) => {
-      return data;
-      console.log(data);})
-    .catch((err) => {console.log(err);});
-}
-
 
 function function_readDatabase(databaseId){
 // Implémente la fonction asynchrone readDatabase en gerant les promises
