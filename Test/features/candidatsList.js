@@ -87,7 +87,7 @@ module.exports= { function_list:function_list, readProperty };
 const pageIdThibaud = "23bccb09-6780-49ab-b32b-d3600e511f6f";
 readProperty('ADTR', pageIdThibaud)
   .then((data) => {
-    console.log(data);
+    console.log(data.results[0].rich_text.text.content);
   })
   .catch((err) => {
     console.log(err);

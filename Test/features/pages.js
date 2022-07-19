@@ -50,23 +50,26 @@ async function createPage(databaseId,pageId){
 
     // On récupère entièrement la page d'id <pageId> dans la database SAVE Registrations 
     const database = await notion.databases.query({database_id: registrationsDatabaseId}); 
-    const listProperties = database.results[0].properties;
-    //console.log(listProperties);
+    //const listProperties = database.results[0].properties;
+    console.log(database);
     for (let i in database.results){
         // On parcourt toutes les pages pour trouver celle qui correspond à la page d'id <pageId> 
         if (database.results[i].id == pageId){
             // On récupère le contenue de la page
             let page = database.results[i];
             var propriete1 = await notion.pages.properties.retrieve({ page_id: pageId, property_id: '%3Bmu%7C' });
-            console.log(propriete1);
+
 
             const response = await notion.pages.create({
+
                 parent: {"type": "database_id","database_id": databaseId},
+                
+                /* parent: {"type": "database_id","database_id": databaseId},
                 properties: {
 
                         
 
-                        //'Country of Residence': { propriete1 /* id: '%3Bmu%7C' */ },
+                        //'Country of Residence': { propriete1 id: '%3Bmu%7C' },
                         'Country of Residence': 
                         { 
                             //object: 'property_item',
@@ -147,9 +150,10 @@ async function createPage(databaseId,pageId){
                         'What skills or experiences are you open to share with others ?': { id: '~%3AyB' },
                         'Please indicate when you would like to start the SAVE program': { id: '~NgK' },
                         'First Name': {id: 'title' }                       
-                      
+                    
                 }
-            });
+
+            */});
         }
     }  
 }
