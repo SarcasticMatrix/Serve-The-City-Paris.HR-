@@ -1,7 +1,7 @@
 // Notion Environment
 
 const { Client } = require('@notionhq/client');
-const notion = new Client({ auth: process.env.NOTION_API_KEY });
+const notion = new Client({ auth: "secret_ooFtx37cBiEUH97LBRqkYWKa9draYMePQIrFvLswJcD" });
 
 
 // ATTENTION: Déclarer propAcceptId & proplastNameId!
