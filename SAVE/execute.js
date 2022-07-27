@@ -7,8 +7,9 @@ const notion = new Client({ auth: "secret_ooFtx37cBiEUH97LBRqkYWKa9draYMePQIrFvL
 const NotionAPI = require("./NotionAPI");
 const NodemailerAPI = require("./NodemailerAPI");
 
-// Sending Script
+/// Sending Script
 
+// Initialize the variables
 const database_id="24cfcb07-8066-4805-8d18-6fc35fef6ca2";
 const propAcceptId="LPf%3D";
 const proplastNameId="HI%3CN";
@@ -27,6 +28,11 @@ var pagesIdToCheck = new Array();
 var remindUsers = new Array();
 var pagesIdToCheck2 = new Array();
 
+
+/// Script !
+
+// Acceptance mail script
+// Extracts two lists: [[acceptedPagesId],[declinedPagesId]]
 NotionAPI.function_list(database_id)
     .then( (data)=>{
         data[0].forEach(element => {
@@ -66,11 +72,14 @@ NotionAPI.function_list(database_id)
     })
     .then(async (acceptedUsers) => {
         //console.log(pagesIdToCheck);
-        for (var pageId of pagesIdToCheck) {
-            await NotionAPI.checkMail(pageId);
-        }
+        if(pagesIdToCheck.length<4) { //If the mails were sent, check the corresponding boxes
+            for (var pageId of pagesIdToCheck) {
+                await NotionAPI.checkMail(pageId);
+            }
+        };
         return acceptedUsers;
     })
+    /// Reminder Mail script
     .then(async (acceptedUsers) => {
         /* Users that are already accepted AND not reminded AND are subscribed for more than 80 days*/
         const response = await notion.databases.query({database_id: database_id, filter: { and: [{"property":"Mails sent ?","checkbox": {equals:true}},{"property":"Reminder Mail","checkbox": {equals:false}},{"property":"Reminder","formula":{number: {greater_than_or_equal_to:80}}},{"property":"Accept ?","select":{equals:"Accepted"}}]}});

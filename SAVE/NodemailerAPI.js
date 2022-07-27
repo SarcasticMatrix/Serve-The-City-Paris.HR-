@@ -1,8 +1,6 @@
 const nodemailer = require('nodemailer');
 
 
-
-
 const sendReminderBcc = async (remindUsers)=> {
 
     const transporter = nodemailer.createTransport( {
