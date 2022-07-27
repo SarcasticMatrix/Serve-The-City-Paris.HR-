@@ -82,7 +82,7 @@ NotionAPI.function_list(database_id)
     /// Reminder Mail script
     .then(async (acceptedUsers) => {
         /* Users that are already accepted AND not reminded AND are subscribed for more than 80 days*/
-        const response = await notion.databases.query({database_id: database_id, filter: { and: [{"property":"Mails sent ?","checkbox": {equals:true}},{"property":"Reminder Mail","checkbox": {equals:false}},{"property":"Reminder","formula":{number: {greater_than_or_equal_to:80}}},{"property":"Accept ?","select":{equals:"Accepted"}}]}});
+        const response = await notion.databases.query({database_id: database_id, filter: { and: [{"property":"Mails sent ?","checkbox": {equals:true}},{"property":"Reminder Mail","checkbox": {equals:false}},{"property":"Remaining days","formula":{number: {greater_than_or_equal_to:80}}},{"property":"Accept ?","select":{equals:"Accepted"}}]}});
         const pagesList = response.results;
         var pagesListId = new Array();
         for (page of pagesList) {
