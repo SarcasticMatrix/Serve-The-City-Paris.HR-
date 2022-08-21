@@ -11,8 +11,6 @@ const NodemailerAPI = require("./NodemailerAPI");
 
 // Initialize the variables
 const database_id="24cfcb07-8066-4805-8d18-6fc35fef6ca2";
-const propAcceptId="LPf%3D";
-const proplastNameId="HI%3CN";
 const emailId="i%5Epr";
 const firstNameId="title";
 const lastNameId="HI%3CN";
@@ -42,36 +40,36 @@ NotionAPI.function_list(database_id)
         data[1].forEach(element => {
             declinedUsersPagesId.push(element);
         });
-        
-        //console.log(acceptedUsersPagesId);
+
         return [acceptedUsersPagesId,declinedUsersPagesId];
-    }) //[pageId,pageId...] OF APPLICANTS THAT WERE NEVER ACCEPTED
+    }) 
+    //Returns [[acceptedUserPageId1,acceptedUserPageId2...],[declinedUserPageId1,declinedUserPageId2...]]
     .then(async (pagesId) => {
-        //console.log(pagesId[0]);
         for (var pageId of pagesId[0]) {
-            //console.log(pageId);
+            //Stores the email,firstName,lastName,dateSinceSubscription of every acceptedUser
             var responseEmail = await NotionAPI.readProperty(emailId,pageId);
             var responseFirstName = await NotionAPI.readProperty(firstNameId,pageId);
             var responseLastName= await NotionAPI.readProperty(lastNameId,pageId);
             var responseReminder= await NotionAPI.readProperty(reminderId,pageId);
-            //console.log(response);
             var mail = responseEmail.email;
             var firstName = responseFirstName.results[0].title.plain_text;
             var lastName = responseLastName.results[0].rich_text.plain_text;
             var reminder = responseReminder.formula.number;
             
+            //Concentrates the userData in the acceptedUsers list
             acceptedUsers.push([firstName,lastName,mail,reminder]);
+            //Stores the pagesId that need to be marked as "treated by the script"
             pagesIdToCheck.push(pageId);
         }
-        //console.log(acceptedUsers);
         return acceptedUsers;
+        //acceptedUsers=[[email,firstName,lastName,subscriptionDuration],[...],...]
     })
     .then(async (acceptedUsers) => {
+        //Sends the acceptation mail template to every "Accepted" user
         await NodemailerAPI.sendAccepted(acceptedUsers);
         return acceptedUsers;
     })
     .then(async (acceptedUsers) => {
-        //console.log(pagesIdToCheck);
         if(pagesIdToCheck.length<4) { //If the mails were sent, check the corresponding boxes
             for (var pageId of pagesIdToCheck) {
                 await NotionAPI.checkMail(pageId);
@@ -80,6 +78,7 @@ NotionAPI.function_list(database_id)
         return acceptedUsers;
     })
     /// Reminder Mail script
+    // The idea is the same as the previous part. Only the filters differ.
     .then(async (acceptedUsers) => {
         /* Users that are already accepted AND not reminded AND are subscribed for more than 80 days*/
         const response = await notion.databases.query({database_id: database_id, filter: { and: [{"property":"Mails sent ?","checkbox": {equals:true}},{"property":"Reminder Mail","checkbox": {equals:false}},{"property":"Remaining days","formula":{number: {greater_than_or_equal_to:80}}},{"property":"Accept ?","select":{equals:"Accepted"}}]}});
@@ -88,17 +87,14 @@ NotionAPI.function_list(database_id)
         for (page of pagesList) {
             pagesListId.push(page.id);
         }
-        //console.log(pagesListId);
         return[acceptedUsers,pagesListId];
     })
     .then(async (data) => {
         for (var pageId of data[1]) {
-            //console.log(pageId);
             var responseEmail = await NotionAPI.readProperty(emailId,pageId);
             var responseFirstName = await NotionAPI.readProperty(firstNameId,pageId);
             var responseLastName= await NotionAPI.readProperty(lastNameId,pageId);
             var responseReminder= await NotionAPI.readProperty(reminderId,pageId);
-            //console.log(response);
             var mail = responseEmail.email;
             var firstName = responseFirstName.results[0].title.plain_text;
             var lastName = responseLastName.results[0].rich_text.plain_text;
@@ -117,13 +113,13 @@ NotionAPI.function_list(database_id)
                 console.log(member[2]);
             }
         }
+        // No member selected
         else {
             console.log(`Reminder mail was sent to ${remindUsers.length} members.`)
         }
         return remindUsers;
     })
     .then(async (remindUsers) => {
-        //console.log(pagesIdToCheck2);
         for (var pageId of pagesIdToCheck2) {
             await NotionAPI.checkReminder(pageId);
         }
